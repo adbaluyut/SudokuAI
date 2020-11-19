@@ -1,1 +1,2 @@
 # SudokuAI
+* Constraint Propagation
