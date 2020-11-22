@@ -59,9 +59,10 @@ def main():
         
     # show the initial grid
     board = board_values(selected_game)
-    show(board)
 
-    show(search(board2dict(selected_game)))
+    # change False to True if you want to output the results to a file results.txt
+    show(board, False, difficulty, puzzle)
+    show(search(board2dict(selected_game)), False, difficulty, puzzle)
 
 def board_values(board):
     chars = [char for char in board if char in nums or char in '*']
@@ -105,14 +106,26 @@ def keep(values, sq, n):
     else:
         return False
 
-def show(values):
-    width = 1 + max(len(values[sq]) for sq in sqs)
+# print the board to the terminal with an option to output to a file
+def show(values, output, difficulty, puzzle):
+    if output is True:
+        f = open('results.txt', 'a')
+        f.write('\n' + difficulty + ' ' + puzzle + '\n')
     horizontal_line = "------+-------+------"
     for letter in rows:
+        #for every row iterate through the columns and append to a new string the value in that index
+        # after every num a space space is added and after the third and sixth col a '|' is added
         print (''.join(values[letter + digit] + (' | ' if digit in '36' else ' ') for digit in cols))
+        if output is True:
+            f.write(''.join(values[letter + digit] + (' | ' if digit in '36' else ' ') for digit in cols))
+            f.write('\n')
         # after column C and F print the horizontal grid line
         if letter in 'CF': 
             print (horizontal_line)
+            if output is True:
+                f.write(horizontal_line + '\n')
+    if output is True:
+        f.close()
     print()
 
 def search(values):
