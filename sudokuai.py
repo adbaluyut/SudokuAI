@@ -54,13 +54,14 @@ def main():
             print("Invalid game id. Try again!\n")
         else:
             break
+    
+    selected_game = game_list[difficulty][puzzle]
         
     # show the initial grid
-    show(board_values(game_list[difficulty][puzzle]))
+    board = board_values(selected_game)
+    show(board)
 
-    print()
-
-    show(search(board2dict(board_1)))
+    show(search(board2dict(selected_game)))
 
 def board_values(board):
     chars = [char for char in board if char in nums or char in '*']
@@ -106,12 +107,13 @@ def keep(values, sq, n):
 
 def show(values):
     width = 1 + max(len(values[sq]) for sq in sqs)
-    line = '+'.join(['-'*(width*3)]*3)
-    for r in rows:
-        print (''.join(values[r + char].center(width) + ('|' if char in '36' else '')
-                      for char in cols))
-        if r in 'CF': print (line)
-    print
+    horizontal_line = "------+-------+------"
+    for letter in rows:
+        print (''.join(values[letter + digit] + (' | ' if digit in '36' else ' ') for digit in cols))
+        # after column C and F print the horizontal grid line
+        if letter in 'CF': 
+            print (horizontal_line)
+    print()
 
 def search(values):
     if values is False:
@@ -128,11 +130,11 @@ def search(values):
     return False
 
 def solved(values):
-    def unitsolved(unit): 
-        return set(values[sq] for sq in unit) == set(nums)
-    return values is not False and all(unitsolved(unit) for unit in unit_pos)
+    return values is not False and all(unitsolved(unit, values) for unit in unit_pos)
 
-board_1  = '**3*2*6**9**3*5**1**18*64****81*29**7*******8**67*82****26*95**8**2*3**9**5*1*3**'
+
+def unitsolved(unit, values): 
+        return set(values[sq] for sq in unit) == set(nums)
 
     
 if __name__ == '__main__':
