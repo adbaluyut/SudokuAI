@@ -142,13 +142,6 @@ def search(values):
         if e: return e
     return False
 
-def solved(values):
-    return values is not False and all(unitsolved(unit, values) for unit in unit_pos)
-
-
-def unitsolved(unit, values): 
-        return set(values[sq] for sq in unit) == set(nums)
-
     
 if __name__ == '__main__':
     main()
